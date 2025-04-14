@@ -1,4 +1,4 @@
-package com.luannt.demomvvm.view.data;
+package com.luannt.demomvvm.model;
 
 /**
  * A generic class that holds a result success w/ data or an error exception.

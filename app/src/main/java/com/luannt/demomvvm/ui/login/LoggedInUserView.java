@@ -1,4 +1,4 @@
-package com.luannt.demomvvm.view.ui.login;
+package com.luannt.demomvvm.ui.login;
 
 /**
  * Class exposing authenticated user details to the UI.

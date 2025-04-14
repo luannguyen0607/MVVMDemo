@@ -1,4 +1,4 @@
-package com.luannt.demomvvm.view.ui.login;
+package com.luannt.demomvvm.ui.login;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -6,16 +6,17 @@ import androidx.lifecycle.ViewModel;
 
 import android.util.Patterns;
 
-import com.luannt.demomvvm.view.data.LoginRepository;
-import com.luannt.demomvvm.view.data.Result;
-import com.luannt.demomvvm.view.data.model.LoggedInUser;
 import com.luannt.demomvvm.R;
+import com.luannt.demomvvm.model.Result;
+import com.luannt.demomvvm.model.User;
+import com.luannt.demomvvm.respository.LoginRepository;
 
 public class LoginViewModel extends ViewModel {
 
-    private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
-    private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
+    private final MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
+    private final MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
     private LoginRepository loginRepository;
+
 
     LoginViewModel(LoginRepository loginRepository) {
         this.loginRepository = loginRepository;
@@ -31,11 +32,11 @@ public class LoginViewModel extends ViewModel {
 
     public void login(String username, String password) {
         // can be launched in a separate asynchronous job
-        Result<LoggedInUser> result = loginRepository.login(username, password);
+        Result result = loginRepository.login(username, password);
 
         if (result instanceof Result.Success) {
-            LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
-            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
+            User data = ((Result.Success<User>) result).getData();
+            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getName())));
         } else {
             loginResult.setValue(new LoginResult(R.string.login_failed));
         }

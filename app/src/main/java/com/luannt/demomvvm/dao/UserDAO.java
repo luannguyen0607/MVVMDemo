@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.luannt.demomvvm.model.User;
 
@@ -18,7 +19,7 @@ public interface UserDAO {
     void bulkInsert(List<User> users);
 
     @Query("SELECT * FROM user")
-    LiveData<List<User>>getAllUsers();
+    LiveData<List<User>> getAllUsers();
 
     @Query("SELECT * FROM user WHERE id = :id")
     User getUserById(int id);
@@ -30,5 +31,14 @@ public interface UserDAO {
     void deleteAllUsers();
 
     @Query("SELECT * FROM user WHERE name LIKE :name")
-    LiveData<List<User>> getUserByName(String name);
+    User getUserByName(String name);
+
+    @Query("SELECT * FROM user WHERE id = :userId AND password = :pass")
+    User getUserByUserIdPassword(String userId, String pass);
+
+    @Query("UPDATE user SET alreadyLogin = 1 WHERE id = :userid")
+    void updateAlreadyLogin(String userid);
+
+    @Query("SELECT * FROM user WHERE alreadyLogin = 1")
+    User getLoggedInUser();
 }

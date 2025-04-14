@@ -5,7 +5,7 @@ import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "user", indices = @Index(value = {"id"},unique = true))
+@Entity(tableName = "user", indices = @Index(value = {"id"}, unique = true))
 public class User {
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -16,11 +16,17 @@ public class User {
     @ColumnInfo(name = "name")
     private String name;
 
-    @ColumnInfo(name = "name")
+    @ColumnInfo(name = "age")
     private int age;
 
     @ColumnInfo(name = "email")
     private int email;
+
+    @ColumnInfo(name = "password")
+    private String password;
+
+    @ColumnInfo(name = "alreadyLogin")
+    private int isAlreadyLogin;
 
     public User(String name) {
         this.name = name;
@@ -64,5 +70,21 @@ public class User {
 
     public void setEmail(int email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public int getIsAlreadyLogin() {
+        return isAlreadyLogin;
+    }
+
+    public void setIsAlreadyLogin(int isAlreadyLogin) {
+        this.isAlreadyLogin = isAlreadyLogin;
     }
 }

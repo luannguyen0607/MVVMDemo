@@ -1,4 +1,4 @@
-package com.luannt.demomvvm.ui.notifications;
+package com.luannt.demomvvm.ui.main.notifications;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

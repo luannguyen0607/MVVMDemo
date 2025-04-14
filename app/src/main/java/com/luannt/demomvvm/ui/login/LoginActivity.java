@@ -1,4 +1,4 @@
-package com.luannt.demomvvm.view.ui.login;
+package com.luannt.demomvvm.ui.login;
 
 import android.app.Activity;
 
@@ -37,8 +37,7 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
-                .get(LoginViewModel.class);
+        loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;

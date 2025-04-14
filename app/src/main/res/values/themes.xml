@@ -2,4 +2,13 @@
 <resources>
 
     <style name="Theme.DemoMVVM" parent="Theme.MaterialComponents.DayNight.NoActionBar" />
+
+    <style name="Theme.DemoMVVM.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.DemoMVVM.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.DemoMVVM.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
