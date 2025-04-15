@@ -22,8 +22,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.luannt.demomvvm.R;
 import com.luannt.demomvvm.databinding.ActivityLoginBinding;
+import com.luannt.demomvvm.respository.LoginRepository;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -37,10 +40,14 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        LoginViewModelFactory factory = new LoginViewModelFactory(LoginRepository.getInstance(getApplicationContext()));
 
-        final EditText usernameEditText = binding.username;
-        final EditText passwordEditText = binding.password;
+        loginViewModel = new ViewModelProvider(this, factory).get(LoginViewModel.class);
+
+
+        final TextInputEditText usernameEditText = binding.etUserId;
+        final TextInputLayout passwordLayout = binding.inputPassword;
+        final TextInputEditText passwordEditText = binding.etPassword;
         final Button loginButton = binding.login;
         final ProgressBar loadingProgressBar = binding.loading;
 
@@ -50,12 +57,13 @@ public class LoginActivity extends AppCompatActivity {
                 if (loginFormState == null) {
                     return;
                 }
+                passwordLayout.setError(null);
                 loginButton.setEnabled(loginFormState.isDataValid());
                 if (loginFormState.getUsernameError() != null) {
                     usernameEditText.setError(getString(loginFormState.getUsernameError()));
                 }
                 if (loginFormState.getPasswordError() != null) {
-                    passwordEditText.setError(getString(loginFormState.getPasswordError()));
+                    passwordLayout.setError(getString(loginFormState.getPasswordError()));
                 }
             }
         });
@@ -93,11 +101,9 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                loginViewModel.loginDataChanged(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+                loginViewModel.loginDataChanged(passwordEditText.getText().toString());
             }
         };
-        usernameEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 

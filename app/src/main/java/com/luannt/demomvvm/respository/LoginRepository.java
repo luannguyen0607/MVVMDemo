@@ -1,7 +1,8 @@
 package com.luannt.demomvvm.respository;
 
-import android.app.Application;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.lifecycle.LiveData;
 
@@ -10,8 +11,13 @@ import com.luannt.demomvvm.database.UserDatabase;
 import com.luannt.demomvvm.model.Result;
 import com.luannt.demomvvm.model.User;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class LoginRepository {
     private static volatile LoginRepository instance;
+    private  ExecutorService executor;
+    private  Handler mainHandler;
     private UserDatabase database;
     private UserDAO userDAO;
     private LiveData<User> user;
@@ -23,6 +29,8 @@ public class LoginRepository {
     private LoginRepository(Context context) {
         database = UserDatabase.getInstance(context);
         userDAO = database.userDAO();
+        executor = Executors.newSingleThreadExecutor();
+        mainHandler = new Handler(Looper.getMainLooper());
     }
 
     public static LoginRepository getInstance(Context context) {
@@ -47,9 +55,15 @@ public class LoginRepository {
         }
     }
 
-    public boolean isLoggedIn() {
-        User user = userDAO.getLoggedInUser();
-        return user != null;
+    public void getLoggedInUser(OnUserLoadedCallback callback) {
+        executor.execute(() -> {
+            User user = userDAO.getLoggedInUser();
+            mainHandler.post(() -> callback.onUserLoaded(user));
+        });
+    }
+
+    public interface OnUserLoadedCallback {
+        void onUserLoaded(User user);
     }
 
 }

@@ -2,10 +2,11 @@ package com.luannt.demomvvm.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -16,10 +17,13 @@ import com.luannt.demomvvm.R;
 import com.luannt.demomvvm.databinding.ActivityMainBinding;
 import com.luannt.demomvvm.respository.LoginRepository;
 import com.luannt.demomvvm.ui.login.LoginActivity;
+import com.luannt.demomvvm.ui.login.LoginViewModel;
+import com.luannt.demomvvm.ui.login.LoginViewModelFactory;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    private LoginViewModel loginViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +50,20 @@ public class MainActivity extends AppCompatActivity {
             NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
             NavigationUI.setupWithNavController(binding.navView, navController);
         }
-        LoginRepository loginRepo = LoginRepository.getInstance(this);
-        if (!loginRepo.isLoggedIn()) {
-            startActivity(new Intent(this, LoginActivity.class));
-        }
+
+        LoginViewModelFactory factory = new LoginViewModelFactory(LoginRepository.getInstance(getApplicationContext()));
+
+        loginViewModel = new ViewModelProvider(this, factory).get(LoginViewModel.class);
+
+        loginViewModel.getLoggedInUser().observe(this, user -> {
+            if (user == null) {
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        loginViewModel.loadLoggedInUser(); // check login status
     }
 
 }
