@@ -1,9 +1,12 @@
 package com.luannt.demomvvm.viewmodel;
 
+import android.app.Application;
+
 import androidx.databinding.Bindable;
 import androidx.databinding.Observable;
 import androidx.databinding.ObservableField;
 import androidx.databinding.PropertyChangeRegistry;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -11,13 +14,14 @@ import androidx.lifecycle.ViewModel;
 import com.luannt.demomvvm.model.User;
 import com.luannt.demomvvm.respository.UserRepository;
 
-public class UserViewModel extends ViewModel  implements Observable {
+public class UserViewModel extends AndroidViewModel implements Observable {
     private final MutableLiveData<String> userName = new MutableLiveData<>();
     private final UserRepository userRepository;
     private User user;
     private final PropertyChangeRegistry propertyChangeRegistry = new PropertyChangeRegistry();
 
-    public UserViewModel() {
+    public UserViewModel(Application application) {
+        super(application);
         userRepository = new UserRepository();
         loadUser();
     }
